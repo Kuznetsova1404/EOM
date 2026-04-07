@@ -1,93 +1,24 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const counters = document.querySelectorAll('[data-counter]');
-  const animateCounter = (el) => {
-    const source = el.textContent.trim();
-    const num = parseFloat(source.replace(',', '.'));
-    if (Number.isNaN(num)) return;
-    const hasPlus = source.includes('+');
-    const hasMld = source.includes('млрд');
-    const duration = 1200;
-    const start = performance.now();
-
-    const tick = (time) => {
-      const progress = Math.min((time - start) / duration, 1);
-      const current = (num * progress).toFixed(num % 1 ? 1 : 0);
-      el.textContent = `${current.replace('.', ',')}${hasMld ? ' млрд' : ''}${hasPlus ? '+' : ''}`;
-      if (progress < 1) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  };
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        animateCounter(entry.target);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.3 });
-  counters.forEach((el) => observer.observe(el));
-
-  const filterButtons = document.querySelectorAll('[data-year]');
-  const projectCards = document.querySelectorAll('#projects-grid .card');
-  filterButtons.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      filterButtons.forEach((item) => item.classList.remove('is-active'));
-      btn.classList.add('is-active');
-      const year = btn.dataset.year;
-      projectCards.forEach((card) => {
-        card.style.display = card.dataset.years.split(',').includes(year) ? '' : 'none';
-      });
-    });
-  });
-  if (filterButtons[0]) filterButtons[0].click();
-
-  const lightbox = document.getElementById('eom-review-lightbox');
-  const lightboxIframe = lightbox?.querySelector('iframe');
-  document.querySelectorAll('.review-item[data-pdf]').forEach((item) => {
-    item.addEventListener('click', () => {
-      if (!lightbox || !lightboxIframe) return;
-      lightbox.classList.add('is-open');
-      lightbox.setAttribute('aria-hidden', 'false');
-      lightboxIframe.src = item.dataset.pdf;
-    });
-  });
-  document.querySelector('[data-close-lightbox]')?.addEventListener('click', () => {
-    lightbox?.classList.remove('is-open');
-    lightbox?.setAttribute('aria-hidden', 'true');
-    if (lightboxIframe) lightboxIframe.src = '';
-  });
-
-  const requestForm = document.querySelector('[data-request-form]');
-  const successModal = document.getElementById('eom-success-modal');
-  requestForm?.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const formData = new FormData(requestForm);
-    formData.append('action', 'eom_submit_form');
-    formData.append('nonce', EOMTheme.nonce);
-
-    const response = await fetch(EOMTheme.ajaxUrl, { method: 'POST', body: formData });
-    const payload = await response.json();
-
-    if (response.ok && payload.success) {
-      requestForm.reset();
-      successModal?.classList.add('is-open');
-      successModal?.setAttribute('aria-hidden', 'false');
-      return;
-    }
-
-    alert(payload?.data?.message || EOMTheme.error);
-  });
-
-  document.querySelector('[data-close-modal]')?.addEventListener('click', () => {
-    successModal?.classList.remove('is-open');
-    successModal?.setAttribute('aria-hidden', 'true');
-  });
-
-  document.querySelectorAll('.hero__play').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const url = btn.dataset.videoUrl;
-      if (url) window.open(url, '_blank', 'noopener,noreferrer');
-    });
-  });
-});
+:root{--bg:#f2f2f2;--text:#10213f;--blue:#0a3a7a;--accent:#d8b38f;--white:#fff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif}
+.container{width:min(1180px,94%);margin:0 auto}.section{padding:28px 0}.section--tight{padding-top:10px}
+h1,h2,h3,p{margin:0 0 12px}h1,h2{text-transform:uppercase;line-height:1}
+h2{font-size:clamp(30px,3.2vw,48px);color:var(--blue)}.section-lead{max-width:760px;color:#39475f}
+.btn{border:0;background:var(--accent);color:#fff;padding:12px 20px;border-radius:8px;cursor:pointer}
+.btn--outline{background:transparent;border:1px solid #b7bfd0;color:var(--text)}.btn--outline-light{background:transparent;border:1px solid rgba(255,255,255,.45)}
+.site-header{padding:18px 0 14px}.site-header__inner{display:flex;justify-content:space-between;align-items:center}.site-logo__text{font-weight:800;text-transform:uppercase}
+.hero{position:relative;min-height:460px;border-radius:12px;background:#112 center/cover no-repeat;overflow:hidden;display:flex;align-items:flex-end;padding:28px}.hero__overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(9,15,30,.75),rgba(9,15,30,.25))}.hero__content{position:relative;z-index:1;max-width:760px;color:#fff}.hero__play{position:absolute;right:24px;bottom:24px;z-index:1;width:64px;height:64px;border-radius:50%;border:0;background:#fff;color:#123;font-size:24px;cursor:pointer}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr)}.stat-card{background:#e8d9cb;padding:16px;border-right:1px solid #fff}.stat-card strong{font-size:clamp(36px,4vw,58px);display:block;color:var(--accent)}
+.cards{display:grid;gap:12px}.cards--3{grid-template-columns:repeat(3,1fr)}.cards--4{grid-template-columns:repeat(4,1fr)}
+.card{position:relative;min-height:220px;border-radius:8px;overflow:hidden;background:#223}.card img,.card .wp-post-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.card__overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(1,9,26,.1),rgba(1,9,26,.78))}.card__content{position:absolute;left:12px;right:12px;bottom:10px;z-index:1;color:#fff}.card__content h3{font-size:21px}
+.workflow-list{display:grid;gap:12px}.workflow-item{background:#fff;border-radius:8px;padding:16px}.workflow-benefit{font-weight:700;color:#0f2f63}
+.year-filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.year-filter__btn{border:0;background:#fff;padding:7px 12px;border-radius:20px;cursor:pointer}.year-filter__btn.is-active{background:var(--accent);color:#fff}
+.promo-banner{padding:28px;border-radius:10px;background:linear-gradient(90deg,#0c3d7e,#0f5fb7);text-align:center;color:#fff;font-size:clamp(26px,3.3vw,42px);font-weight:800;text-transform:uppercase}
+.trust-logos{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.trust-logos img{width:100%;background:#fff;border-radius:8px;padding:8px;aspect-ratio:3/2;object-fit:contain}
+.reviews-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.review-item{border:1px solid #d9d9d9;background:#fff;padding:0;cursor:pointer}.review-item img{display:block;width:100%;height:190px;object-fit:cover}
+.contact-box{background:#fff;border-radius:12px;padding:26px}.request-form{display:grid;grid-template-columns:1fr 1fr auto;gap:10px}.request-form input{padding:12px;border-radius:8px;border:1px solid #ccd2de}
+.contractor-cta{background:linear-gradient(90deg,rgba(9,15,31,.72),rgba(9,15,31,.2)),#1d2435 center/cover no-repeat;min-height:240px;border-radius:12px;padding:28px;color:#fff}.contractor-cta h2{color:#f6d7b7}
+.site-footer{background:#041531;color:#fff;padding:36px 0;margin-top:30px}.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px}.footer-chip{display:inline-block;border:1px solid #4f6387;padding:8px 14px;border-radius:20px}
+.eom-modal,.eom-lightbox{position:fixed;inset:0;background:rgba(4,8,18,.75);display:none;align-items:center;justify-content:center;z-index:999}.eom-modal.is-open,.eom-lightbox.is-open{display:flex}
+.eom-modal__content{background:#fff;padding:20px;border-radius:10px;min-width:280px;text-align:center}.eom-lightbox iframe{width:min(90vw,900px);height:80vh;border:0;background:#fff}.eom-lightbox__close{position:absolute;top:16px;right:18px;border:0;background:#fff;border-radius:50%;width:36px;height:36px;font-size:24px;cursor:pointer}
+@media (max-width:980px){.cards--3,.cards--4,.stats-grid,.trust-logos,.reviews-grid,.footer-grid{grid-template-columns:1fr 1fr}.request-form{grid-template-columns:1fr}}
+@media (max-width:680px){.cards--3,.cards--4,.stats-grid,.trust-logos,.reviews-grid,.footer-grid{grid-template-columns:1fr}.hero{min-height:360px}}
