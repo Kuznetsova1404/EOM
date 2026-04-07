@@ -1,0 +1,99 @@
+/*
+Theme Name: EOM Landing Template
+Theme URI: https://github.com/
+Author: Codex
+Description: Лендинг в стиле макета с секциями для WordPress.
+Version: 1.0.0
+Text Domain: eom-template
+*/
+
+:root {
+  --blue: #0f2a5f;
+  --light-blue: #1d4d95;
+  --sand: #d9b28a;
+  --cream: #f4f1ed;
+  --text: #1f1f1f;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text);
+  background: #fff;
+}
+.container { width: min(1120px, 92%); margin: 0 auto; }
+.topbar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 22px 0;
+}
+.logo { font-weight: 700; text-transform: uppercase; font-size: 20px; color: var(--blue); }
+.top-links { display: flex; gap: 28px; font-size: 14px; }
+.hero {
+  background: linear-gradient(rgba(10,20,40,.56), rgba(10,20,40,.56)), url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1600&q=80') center/cover;
+  border-radius: 10px;
+  min-height: 420px;
+  color: #fff;
+  display: flex;
+  align-items: flex-end;
+  padding: 36px;
+}
+.hero h1 { margin: 0 0 10px; font-size: clamp(30px, 6vw, 58px); line-height: .95; text-transform: uppercase; }
+.hero p { max-width: 840px; margin: 0; opacity: .95; }
+.stats { display: grid; grid-template-columns: repeat(4,1fr); margin: 0; }
+.stat { padding: 20px; background: #e7d6c5; border-right: 1px solid #fff; }
+.stat strong { display: block; color: var(--sand); font-size: 44px; margin-top: 10px; }
+.section { padding: 52px 0; }
+.section h2 { font-size: 40px; color: var(--blue); text-transform: uppercase; margin: 0 0 16px; line-height: 1; }
+.cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+.card {
+  min-height: 220px;
+  border-radius: 8px;
+  overflow: hidden;
+  color: #fff;
+  display: flex;
+  align-items: flex-end;
+  padding: 18px;
+  background-size: cover;
+  background-position: center;
+}
+.card span { font-weight: 700; font-size: 24px; text-transform: uppercase; }
+.experience-years { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+.experience-years b { padding: 8px 10px; border: 1px solid #cfcfcf; border-radius: 16px; }
+.banner {
+  border-radius: 8px;
+  background: linear-gradient(120deg, #062864, #0b67d0);
+  color: #fff;
+  text-align: center;
+  padding: 36px 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 28px;
+}
+.logos { display:grid; grid-template-columns: repeat(6,1fr); gap: 12px; }
+.logo-box { border:1px solid #dedede; min-height: 70px; display:flex; align-items:center; justify-content:center; color:#888; font-size: 12px; }
+.feedback {
+  background: linear-gradient(rgba(255,255,255,.86), rgba(255,255,255,.86)), url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1600&q=80') center/cover;
+  border-radius: 10px;
+  padding: 42px;
+}
+.form-row { display:grid; grid-template-columns: repeat(3,1fr) auto; gap:10px; margin-top: 16px; }
+.form-row input { padding: 12px; border:1px solid #ccc; border-radius: 6px; }
+.form-row button { background: var(--sand); color:#fff; border:0; border-radius:6px; padding: 0 20px; font-weight:700; }
+.footer {
+  margin-top: 40px;
+  background: #061633;
+  color:#fff;
+  padding: 36px 0;
+}
+.footer-grid { display:grid; grid-template-columns: 2fr 1fr 1fr; gap: 18px; }
+
+@media (max-width: 900px) {
+  .stats, .cards, .logos, .form-row, .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 600px) {
+  .topbar { flex-direction: column; align-items: flex-start; gap:10px; }
+  .stats, .cards, .logos, .form-row, .footer-grid { grid-template-columns: 1fr; }
+  .hero { min-height: 320px; padding: 24px; }
+  .section h2 { font-size: 30px; }
+}
